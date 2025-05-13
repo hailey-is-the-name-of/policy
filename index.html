@@ -6,7 +6,14 @@
   <title>이재명 대통령후보 정책모음</title>
   <style>
     body { font-family: sans-serif; padding: 30px; }
-    h1 { font-size: 30px; margin-bottom: 20px; text-align: center; }
+    h1 {
+      font-size: clamp(1.2rem, 4vw, 2rem); /* 최소 1.5rem, 최대 2rem, 중간 뷰포트에선 8vw */
+      text-align: center;
+      margin-bottom: 30px;
+      white-space: nowrap;               /* 줄 바꿈 금지 */
+      overflow: hidden;                  /* 넘치는 텍스트 숨기기 */
+      text-overflow: ellipsis;           /* 너무 길면 ... 처리 (선택) */
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
