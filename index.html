@@ -14,6 +14,20 @@
       overflow: hidden;                  /* 넘치는 텍스트 숨기기 */
       text-overflow: ellipsis;           /* 너무 길면 ... 처리 (선택) */
     }
+
+    
+    /* 메인페이지로 돌아가기 버튼 */
+    .home-btn {
+      position: absolute;
+      top: 16px;    /* 살짝 더 위로 올려도 되고 */
+      left: 16px;
+      background: none;
+      color: #888;          /* 연한 회색 */
+      font-size: 12px;      /* 좀 더 작은 크기 */
+      padding: 4px 6px;     /* 여백도 작게 */
+      text-decoration: none;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -49,6 +63,8 @@
 
 </head>
 <body>
+   <a href="http://bluenew.life" class="home-btn">메인페이지로 돌아가기</a>
+
   <h1>📚 이재명 대통령후보 정책모음</h1>
 
   <div class='grid'>
