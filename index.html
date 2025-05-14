@@ -34,6 +34,7 @@
       gap: 20px;
     }
     .card {
+      position: relative;
       border: 1px solid #ddd;
       border-radius: 12px;
       padding: 25px 15px;
@@ -42,7 +43,26 @@
       font-weight: bold;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       transition: background 0.2s;
+        white-space: nowrap;           /* 줄 바꿈 방지 */
+  overflow: hidden;              /* 넘치는 글자 숨기기 */
+  text-overflow: ellipsis;       /* ...으로 생략 */
+  font-size: clamp(12px, 2vw, 16px); /* 반응형 폰트 크기 */
+
     }
+
+
+    .new-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
     .card:hover {
       background: #f3f3f3;
     }
@@ -57,6 +77,7 @@
       display: block;
       margin: 0 auto;
     }
+
 
 
   </style>
@@ -77,6 +98,8 @@
     <a href='science/index.html'><div class='card'>경제:과학</div></a>
     <a href='nongup/index.html'><div class='card'>경제:농업</div></a>
     <a href='fish/index.html'><div class='card'>경제:어업</div></a>
+    <a href='shipbuilding/index.html'><div class='card'>경제:조선산업   <div class="new-badge">NEW!</div>
+ </div></a>
     <a href='labour/index.html'><div class='card'>노동</div></a>
     <a href='no/index.html'><div class='card'>노동:직장인</div></a>
     <a href='bok/index.html'><div class='card'>복지:공공의료</div></a>
