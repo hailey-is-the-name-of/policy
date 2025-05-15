@@ -50,7 +50,7 @@
     let currentOrg = "꽃";
     const raceChart = echarts.init(document.getElementById("raceChart"));
 
-    fetch("line_growth_flower_fair_full.json")
+    fetch("line_growth_flower_fair_fixed.json")
       .then(res => res.json())
       .then(json => {
         fullData = json;
