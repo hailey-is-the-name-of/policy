@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>꽃 vs 공정 대구 정당 지지율 종합 시각화</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background: #f5f7fa; }
+    h2 { text-align: center; margin-top: 20px; color: #333; }
+    .chart-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
+    .chart-box { width: 45%; min-width: 350px; height: 400px; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.05); padding: 10px; }
+    .tabs { text-align: center; margin: 20px auto; }
+    .tabs button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      background: #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tabs button.active { background: #015DA9; color: white; }
+    @media (max-width: 768px) {
+      .chart-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <h2>🌸 꽃 vs ⚖️ 공정 대구 정당 지지율 종합 시각화</h2>
+  <div class="tabs">
+    <button class="tab-button active" data-org="꽃">🌸 꽃</button>
+    <button class="tab-button" data-org="공정">⚖️ 공정</button>
+  </div>
+  <div class="chart-container">
+    <div id="lineChart" class="chart-box"></div>
+    <div id="areaChart" class="chart-box"></div>
+    <div id="barChart" class="chart-box"></div>
+    <div id="pieChart" class="chart-box"></div>
+    <div id="raceChart" class="chart-box"></div>
+  </div>
+
+  <script>
+    let fullData = {};
+    let currentOrg = '꽃';
+
+    const lineChart = echarts.init(document.getElementById('lineChart'));
+    const areaChart = echarts.init(document.getElementById('areaChart'));
+    const barChart = echarts.init(document.getElementById('barChart'));
+    const pieChart = echarts.init(document.getElementById('pieChart'));
+    const raceChart = echarts.init(document.getElementById('raceChart'));
+
+    fetch('line_growth_flower_fair.json')
+      .then(res => res.json())
+      .then(json => {
+        fullData = json;
+        renderAllCharts(currentOrg);
+      });
+
+    function renderAllCharts(org) {
+      const data = fullData[org];
+      const dates = data.dates;
+      const series = data.series;
+
+      // 선형 비교 차트
+      lineChart.setOption({
+        title: { text: `[${org}] 선형 추이`, left: 'center' },
+        tooltip: { trigger: 'axis' },
+        legend: { top: 30 },
+        xAxis: { type: 'category', data: dates },
+        yAxis: { type: 'value', max: 60 },
+        series: series.map(s => ({
+          ...s,
+          smooth: false,
+          showSymbol: true,
+          symbolSize: 6,
+          label: { show: false }
+        }))
+      });
+
+      // 누적 영역 차트
+      areaChart.setOption({
+        title: { text: `[${org}] 누적 영역`, left: 'center' },
+        tooltip: { trigger: 'axis' },
+        legend: { top: 30 },
+        xAxis: { type: 'category', data: dates },
+        yAxis: { type: 'value', max: 60 },
+        series: series.map(s => ({
+          ...s,
+          type: 'line',
+          areaStyle: {},
+          stack: 'total',
+          smooth: true,
+          showSymbol: false
+        }))
+      });
+
+      // 바 차트
+      const latest = dates.length - 1;
+      barChart.setOption({
+        title: { text: `[${org}] 마지막 지점 비교`, left: 'center' },
+        tooltip: { trigger: 'item' },
+        xAxis: { type: 'category', data: series.map(s => s.name) },
+        yAxis: { type: 'value', max: 60 },
+        series: [{
+          type: 'bar',
+          data: series.map(s => s.data[latest]),
+          itemStyle: {
+            color: (params) => params.name === '더불어민주당' ? '#015DA9' : '#D93A2F'
+          },
+          label: { show: true, position: 'top', formatter: '{c}%' }
+        }]
+      });
+
+      // 파이차트
+      const pieData = series.map(s => {
+        const avg = s.data.reduce((a, b) => a + (b || 0), 0) / s.data.length;
+        return { name: s.name, value: Math.round(avg * 10) / 10 };
+      });
+      pieChart.setOption({
+        title: { text: `[${org}] 평균 지지율`, left: 'center' },
+        tooltip: { trigger: 'item' },
+        legend: { bottom: 0 },
+        series: [{
+          type: 'pie',
+          radius: '55%',
+          data: pieData,
+          label: { formatter: '{b}: {c}%' }
+        }]
+      });
+
+      // 라인 레이스 애니메이션 차트
+      renderRaceChart(org);
+    }
+
+    function renderRaceChart(org) {
+      const data = fullData[org];
+      const dates = data.dates;
+      const seriesData = data.series;
+
+      let frameIndex = 0;
+      const totalFrames = dates.length;
+
+      const accumulatedSeries = seriesData.map(s => ({
+        name: s.name,
+        type: 'line',
+        data: [],
+        smooth: true,
+        showSymbol: false
+      }));
+
+      raceChart.setOption({
+        title: { text: `[${org}] 시간순 라인 애니메이션`, left: 'center' },
+        tooltip: { trigger: 'axis' },
+        legend: { top: 30 },
+        xAxis: { type: 'category', data: dates },
+        yAxis: { type: 'value', max: 60 },
+        series: accumulatedSeries
+      });
+
+      function step() {
+        if (frameIndex >= totalFrames) return;
+
+        accumulatedSeries.forEach((s, i) => {
+          s.data = seriesData[i].data.slice(0, frameIndex + 1);
+        });
+
+        raceChart.setOption({ series: accumulatedSeries }, { notMerge: true });
+
+        frameIndex++;
+        setTimeout(step, 300);
+      }
+
+      step();
+    }
+
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentOrg = this.dataset.org;
+        renderAllCharts(currentOrg);
+      });
+    });
+  </script>
+</body>
+</html>
