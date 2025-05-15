@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>대구 8개 구 바 레이스</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #015DA9, #003f70);
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 10px 10px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    #main {
+      width: 95vw;
+      height: 80vh;
+      margin: 0 auto;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        font-size: 1.4rem;
+        padding-top: 20px;
+      }
+      #main {
+        height: 75vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>🔥 대구 8개 구 실시간 바 레이스</header>
+  <div id="main"></div>
+  <script>
+    let chart = echarts.init(document.getElementById('main'));
+    let data = [];
+    let currentIndex = 0;
+
+    fetch('bar_race_simulated_data.json')
+      .then(res => res.json())
+      .then(json => {
+        data = json;
+        renderFrame();
+        setInterval(renderFrame, 5000);
+      });
+
+    function renderFrame() {
+      if (currentIndex >= data.length) return;
+
+      let frame = data[currentIndex];
+      let time = frame.time;
+      let items = Object.entries(frame)
+                        .filter(([k, _]) => k !== 'time')
+                        .map(([region, value]) => {
+                          return { name: region, value: value };
+                        })
+                        .sort((a, b) => b.value - a.value);
+
+      chart.setOption({
+        backgroundColor: 'transparent',
+        title: {
+          text: '⏱ ' + time + ' 기준 득표율',
+          left: 'center',
+          top: 20,
+          textStyle: {
+            fontSize: 16,
+            color: '#ffffff'
+          }
+        },
+        tooltip: {
+          formatter: '{b}: {c}%',
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          borderColor: '#015DA9',
+          textStyle: { color: '#fff' }
+        },
+        xAxis: {
+          max: 40,
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { show: false },
+          axisLabel: {
+            formatter: '{value}%',
+            color: '#eee',
+            fontSize: 12
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: items.map(x => x.name),
+          inverse: true,
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: {
+            color: '#fff',
+            fontSize: 14
+          }
+        },
+        series: [{
+          realtimeSort: true,
+          name: '득표율',
+          type: 'bar',
+          data: items.map(x => x.value),
+          label: {
+            show: true,
+            position: 'right',
+            formatter: '{c}%',
+            color: '#fff',
+            fontWeight: 'bold'
+          },
+          itemStyle: {
+            borderRadius: 6,
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+              { offset: 0, color: '#fcb045' },
+              { offset: 0.5, color: '#fd1d1d' },
+              { offset: 1, color: '#833ab4' }
+            ])
+          }
+        }],
+        animationDuration: 0,
+        animationDurationUpdate: 500,
+        animationEasing: 'cubicOut',
+        animationEasingUpdate: 'cubicInOut'
+      });
+      currentIndex++;
+    }
+  </script>
+</body>
+</html>
