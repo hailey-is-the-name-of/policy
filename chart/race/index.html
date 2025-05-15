@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+  <meta charset="UTF-8" />
+  <title>대구 8개 구 바 레이스</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f5f5;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    #main {
+      height: 100vh;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+  <script>
+    let chart = echarts.init(document.getElementById('main'));
+    let data = [];
+    let currentIndex = 0;
+
+    fetch('bar_race_simulated_data.json')
+      .then(res => res.json())
+      .then(json => {
+        data = json;
+        renderFrame();
+        setInterval(renderFrame, 5000);
+      });
+
+    function renderFrame() {
+      if (currentIndex >= data.length) return;
+
+      let frame = data[currentIndex];
+      let time = frame.time;
+      let items = Object.entries(frame)
+                        .filter(([k, _]) => k !== 'time')
+                        .map(([region, value]) => {
+                          return { name: region, value: value };
+                        })
+                        .sort((a, b) => b.value - a.value);
+
+      chart.setOption({
+        title: {
+          text: '대구 각 구별 실시간 득표율 - ' + time,
+          left: 'center',
+          textStyle: { fontSize: 20 }
+        },
+        tooltip: {
+          formatter: '{b}: {c}%'
+        },
+        xAxis: {
+          max: 40,
+          axisLabel: { formatter: '{value}%' }
+        },
+        yAxis: {
+          type: 'category',
+          data: items.map(x => x.name),
+          inverse: true,
+          animationDuration: 300,
+          animationDurationUpdate: 300
+        },
+        series: [{
+          realtimeSort: true,
+          name: '득표율',
+          type: 'bar',
+          data: items.map(x => x.value),
+          label: {
+            show: true,
+            position: 'right',
+            formatter: '{c}%'
+          },
+          itemStyle: {
+            color: '#015DA9'
+          }
+        }],
+        animationDuration: 0,
+        animationDurationUpdate: 500,
+        animationEasing: 'linear',
+        animationEasingUpdate: 'linear'
+      });
+      currentIndex++;
+    }
+  </script>
+</body>
+</html>
