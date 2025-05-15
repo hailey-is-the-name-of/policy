@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>대구 정당 지지율 Line Race</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #fff; }
+    #chart { width: 100%; height: 90vh; }
+    #controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+    button {
+      font-size: 16px;
+      padding: 6px 14px;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart"></div>
+  <div id="controls">
+    <button onclick="play()">▶ 재생</button>
+    <button onclick="pause()">⏸ 일시정지</button>
+  </div>
+  <script>
+    let chart = echarts.init(document.getElementById('chart'));
+    let idx = 0;
+    let intervalId = null;
+    let data = [];
+
+    fetch('daegu_line_race.json')
+      .then(res => res.json())
+      .then(json => {
+        data = json;
+        play();  // 자동 시작
+      });
+
+    const option = {
+      xAxis: {
+        max: 'dataMax',
+        axisLabel: { formatter: '{value} %' }
+      },
+      yAxis: {
+        type: 'category',
+        inverse: true,
+        animationDuration: 300,
+        animationDurationUpdate: 300,
+        max: 5
+      },
+      series: [{
+        realtimeSort: true,
+        name: '대구 지지율',
+        type: 'bar',
+        data: [],
+        label: {
+          show: true,
+          position: 'right',
+          valueAnimation: true
+        }
+      }],
+      animationDuration: 1000,
+      animationDurationUpdate: 1000,
+      animationEasing: 'linear',
+      animationEasingUpdate: 'linear',
+      graphic: {
+        elements: [{
+          type: 'text',
+          left: 'center',
+          top: '5%',
+          style: {
+            text: '',
+            font: 'bolder 24px sans-serif'
+          },
+          z: 100
+        }]
+      }
+    };
+
+    function updateChart() {
+      const frame = data[idx];
+      if (!frame) return;
+      option.series[0].data = frame.values.map(v => ({
+        name: v.name,
+        value: v.value
+      }));
+      option.yAxis.data = frame.values.map(v => v.name);
+      option.graphic.elements[0].style.text = `${frame.date} 기준`;
+      chart.setOption(option);
+      idx++;
+      if (idx >= data.length) pause();
+    }
+
+    function play() {
+      if (intervalId) return;
+      updateChart();
+      intervalId = setInterval(updateChart, 2000);
+    }
+
+    function pause() {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+
+    // expose to global
+    window.play = play;
+    window.pause = pause;
+  </script>
+</body>
+</html>
