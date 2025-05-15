@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대구</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f4f8;
+    }
+    #chart {
+      width: 100%;
+      height: 80vh;
+    }
+    #controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      background: #fff;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
+    #controls .buttons {
+      display: flex;
+      gap: 12px;
+    }
+    button {
+      font-size: 16px;
+      padding: 8px 16px;
+      border: none;
+      background: #015DA9;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #01457f;
+    }
+    input[type=range] {
+      width: 80%;
+      max-width: 400px;
+    }
+    #current-date {
+      font-weight: bold;
+      color: #333;
+    }
+    #description {
+      padding: 12px;
+      color: #444;
+      font-size: 0.95rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart"></div>
+  <div id="controls">
+    <div class="buttons">
+      <button onclick="play()">▶ 재생</button>
+      <button onclick="pause()">⏸ 일시정지</button>
+    </div>
+    <input type="range" id="slider" min="0" max="0" value="0" />
+    <span id="current-date"></span>
+  </div>
+  <div id="description">
+테스트  </div>
+
+  <script>
+    let chart = echarts.init(document.getElementById('chart'));
+    let data = null;
+    let idx = 0;
+    let intervalId = null;
+
+    fetch('line_growth_daegu.json')
+      .then(res => res.json())
+      .then(json => {
+        // 두 정당만 필터링
+        json.series = json.series.filter(s => s.name === '더불어민주당' || s.name === '국민의힘');
+        document.getElementById('slider').max = json.dates.length - 1;
+        data = json;
+        render(0);
+      });
+
+    function render(index) {
+      if (!data) return;
+      const option = {
+        title: {
+          text: data.dates[index] + ' 기준 대구 정당 지지율',
+          left: 'center',
+          textStyle: { fontSize: 18 }
+        },
+        tooltip: { trigger: 'axis' },
+        legend: {
+          top: 30,
+          data: ['더불어민주당', '국민의힘']
+        },
+        grid: {
+          left: '10%',
+          right: '10%',
+          bottom: '15%',
+          top: '20%'
+        },
+        xAxis: {
+          type: 'category',
+          data: data.dates
+        },
+        yAxis: {
+          type: 'value',
+          max: 60,
+          axisLabel: { formatter: '{value}%' }
+        },
+        animation: true,
+        animationDurationUpdate: 500,
+        animationEasingUpdate: 'linear',
+        series: data.series.map(s => {
+          const partyColor = s.name === '더불어민주당' ? '#015DA9' : '#D93A2F';
+          const displayData = s.data.map((v, i) => i <= index ? v : null);
+          return {
+            name: s.name,
+            type: 'line',
+            data: displayData,
+            lineStyle: { width: 3, color: partyColor },
+            itemStyle: { color: partyColor },
+            symbolSize: 8,
+            symbol: 'circle',
+            showSymbol: true,
+            label: {
+              show: true,
+              formatter: (params) => params.data != null ? params.data + '%' : '',
+              position: 'top',
+              fontSize: 12
+            },
+            smooth: false
+          };
+        })
+      };
+      chart.setOption(option);
+      document.getElementById('slider').value = index;
+      document.getElementById('current-date').innerText = data.dates[index];
+    }
+
+    function play() {
+      if (intervalId || !data) return;
+      intervalId = setInterval(() => {
+        if (idx >= data.dates.length) {
+          pause();
+          return;
+        }
+        render(idx);
+        idx++;
+      }, 900);
+    }
+
+    function pause() {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+
+    document.getElementById('slider').addEventListener('input', function () {
+      idx = parseInt(this.value);
+      render(idx);
+    });
+
+    window.play = play;
+    window.pause = pause;
+  </script>
+</body>
+</html>
