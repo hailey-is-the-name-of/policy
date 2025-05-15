@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>라인 레이스 - 꽃 vs 공정</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: #f5f7fa;
+      text-align: center;
+    }
+    h2 { color: #333; }
+    .tabs button {
+      padding: 10px 20px;
+      margin: 0 5px 20px 5px;
+      border: none;
+      background: #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tabs button.active {
+      background: #015DA9;
+      color: white;
+    }
+    #raceChart {
+      width: 90%;
+      max-width: 900px;
+      height: 500px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h2>🌸 꽃 vs ⚖️ 공정 - 라인 레이스</h2>
+  <div class="tabs">
+    <button class="tab-button active" data-org="꽃">🌸 꽃</button>
+    <button class="tab-button" data-org="공정">⚖️ 공정</button>
+  </div>
+  <div id="raceChart"></div>
+
+  <script>
+    let fullData = {};
+    let currentOrg = "꽃";
+    const raceChart = echarts.init(document.getElementById("raceChart"));
+
+    fetch("line_growth_flower_fair_fixed.json")
+      .then(res => res.json())
+      .then(json => {
+        fullData = json;
+        renderRaceChart(currentOrg);
+      });
+
+    function renderRaceChart(org) {
+      const data = fullData[org];
+      const dates = data.dates;
+      const seriesData = data.series;
+
+      let frameIndex = 0;
+      const totalFrames = dates.length;
+
+      const accumulatedSeries = seriesData.map(s => ({
+        name: s.name,
+        type: "line",
+        data: [],
+        smooth: true,
+        showSymbol: false
+      }));
+
+      raceChart.setOption({
+        title: { text: `[${org}] 시간순 라인 애니메이션`, left: "center" },
+        tooltip: { trigger: "axis" },
+        legend: { top: 30 },
+        xAxis: { type: "category", data: dates },
+        yAxis: { type: "value", max: 60 },
+        series: accumulatedSeries
+      });
+
+      function step() {
+        if (frameIndex >= totalFrames) return;
+        accumulatedSeries.forEach((s, i) => {
+          s.data = seriesData[i].data.slice(0, frameIndex + 1);
+        });
+        raceChart.setOption({ series: accumulatedSeries }, { notMerge: true });
+        frameIndex++;
+        setTimeout(step, 300);
+      }
+
+      step();
+    }
+
+    document.querySelectorAll(".tab-button").forEach(btn => {
+      btn.addEventListener("click", function() {
+        document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        currentOrg = this.dataset.org;
+        renderRaceChart(currentOrg);
+      });
+    });
+  </script>
+</body>
+</html>
