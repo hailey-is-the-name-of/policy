@@ -47,7 +47,7 @@
     const barChart = echarts.init(document.getElementById('barChart'));
     const pieChart = echarts.init(document.getElementById('pieChart'));
 
-    fetch('line_growth_flower_fair.json')
+    fetch('line_growth_flower_fair_fixed.json')
       .then(res => res.json())
       .then(json => {
         fullData = json;
