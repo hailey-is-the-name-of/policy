@@ -80,11 +80,64 @@
 
 
 
-  </style>
+  
+<style>
+.copy-container {
+  display: flex;
+  align-items: center;
+  background: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.copy-url {
+  flex: 1 1 10px;
+  min-width: 0; /* 핵심! 줄바꿈 방지 + ... 표시 */
+    max-width: 100px; /* 최대 길이 제한 (원하는 만큼 줄여도 됨) */
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: #ddd;
+  border: none;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 4px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #ccc;
+}
+
+
+
+</style>
+
+</style>
 
 </head>
 <body>
-   <a href="http://bluenew.life" class="home-btn">메인페이지로 돌아가기</a>
+
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+  <a href="http://bluenew.life" style="color: #888; font-size: 12px; text-decoration: none;">메인페이지로 돌아가기</a>
+  <div class="copy-container">
+    <span class="copy-url" id="current-url" onclick="copyToClipboard()">로딩중...</span>
+    <button class="copy-btn" onclick="copyToClipboard()">복사</button>
+  </div>
+</div>
+
+   
 
   <h1>📚 이재명 대통령후보 정책모음</h1>
 
@@ -131,5 +184,20 @@
 
 </html>
 
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const fullUrl = window.location.href;
+    const displayUrl = fullUrl.length > 40 ? fullUrl.slice(0, 37) + "..." : fullUrl;
+    document.getElementById('current-url').textContent = displayUrl;
+
+    window.copyToClipboard = function () {
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        alert('주소가 복사되었습니다!');
+      }).catch(err => {
+        alert('복사 실패: ' + err);
+      });
+    };
+  });
+</script>
 
 </body></html>
