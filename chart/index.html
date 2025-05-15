@@ -36,6 +36,7 @@
     <div id="areaChart" class="chart-box"></div>
     <div id="barChart" class="chart-box"></div>
     <div id="pieChart" class="chart-box"></div>
+    <div id="raceChart" class="chart-box"></div>
   </div>
 
   <script>
@@ -46,6 +47,7 @@
     const areaChart = echarts.init(document.getElementById('areaChart'));
     const barChart = echarts.init(document.getElementById('barChart'));
     const pieChart = echarts.init(document.getElementById('pieChart'));
+    const raceChart = echarts.init(document.getElementById('raceChart'));
 
     fetch('line_growth_flower_fair.json')
       .then(res => res.json())
@@ -59,7 +61,7 @@
       const dates = data.dates;
       const series = data.series;
 
-      // 1. 선형 비교 차트
+      // 선형 비교 차트
       lineChart.setOption({
         title: { text: `[${org}] 선형 추이`, left: 'center' },
         tooltip: { trigger: 'axis' },
@@ -75,7 +77,7 @@
         }))
       });
 
-      // 2. 누적 영역 차트
+      // 누적 영역 차트
       areaChart.setOption({
         title: { text: `[${org}] 누적 영역`, left: 'center' },
         tooltip: { trigger: 'axis' },
@@ -92,7 +94,7 @@
         }))
       });
 
-      // 3. 바 차트 (최종 시점 비교)
+      // 바 차트
       const latest = dates.length - 1;
       barChart.setOption({
         title: { text: `[${org}] 마지막 지점 비교`, left: 'center' },
@@ -109,7 +111,7 @@
         }]
       });
 
-      // 4. 파이차트 (평균 지지율)
+      // 파이차트
       const pieData = series.map(s => {
         const avg = s.data.reduce((a, b) => a + (b || 0), 0) / s.data.length;
         return { name: s.name, value: Math.round(avg * 10) / 10 };
@@ -125,6 +127,50 @@
           label: { formatter: '{b}: {c}%' }
         }]
       });
+
+      // 라인 레이스 애니메이션 차트
+      renderRaceChart(org);
+    }
+
+    function renderRaceChart(org) {
+      const data = fullData[org];
+      const dates = data.dates;
+      const seriesData = data.series;
+
+      let frameIndex = 0;
+      const totalFrames = dates.length;
+
+      const accumulatedSeries = seriesData.map(s => ({
+        name: s.name,
+        type: 'line',
+        data: [],
+        smooth: true,
+        showSymbol: false
+      }));
+
+      raceChart.setOption({
+        title: { text: `[${org}] 시간순 라인 애니메이션`, left: 'center' },
+        tooltip: { trigger: 'axis' },
+        legend: { top: 30 },
+        xAxis: { type: 'category', data: dates },
+        yAxis: { type: 'value', max: 60 },
+        series: accumulatedSeries
+      });
+
+      function step() {
+        if (frameIndex >= totalFrames) return;
+
+        accumulatedSeries.forEach((s, i) => {
+          s.data = seriesData[i].data.slice(0, frameIndex + 1);
+        });
+
+        raceChart.setOption({ series: accumulatedSeries }, { notMerge: true });
+
+        frameIndex++;
+        setTimeout(step, 300);
+      }
+
+      step();
     }
 
     document.querySelectorAll('.tab-button').forEach(btn => {
