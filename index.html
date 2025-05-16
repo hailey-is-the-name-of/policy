@@ -1,182 +1,252 @@
-<html><head>
-<meta charset="utf-8"/>
-<title>이재명 대통령후보 정책모음 - [ 교육 ]</title>
-<meta content="이재명 대통령후보 정책모음 - [ 교육 ]" property="og:title"/>
-<meta content="교육정책" property="og:description"/>
-<meta content="http://bluenew.life/policy/edu/1.jpg" property="og:image"/>
-<meta content="http://bluenew.life/policy/edu/index.html" property="og:url"/>
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-<script>
-            Kakao.init('37ea916b7f1ab457b58119c60ec4052a');
-            function shareKakao() {
-                Kakao.Link.sendDefault({
-                    objectType: 'feed',
-                    content: {
-                        title: '이재명 대통령후보 정책모음 - [ 교육 ]',
-                        description: '정책 분야: 교육 ',
-                        imageUrl: '/1.jpg',
-                        link: {
-                            mobileWebUrl: '/index.html',
-                            webUrl: '/index.html'
-                        }
-                    },
-                    buttons: [
-                        {
-                            title: '자세히 보기',
-                            link: {
-                                mobileWebUrl: '/index.html',
-                                webUrl: '/index.html'
-                            }
-                        }
-                    ]
-                });
-            }
-        </script>
-<style>
-            body { font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 0 auto; padding: 30px; line-height: 1.6; }
-            h1 { font-size: 28px; margin-bottom: 10px; }
-            .thumb { width: 100%; margin: 20px 0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-            .share-btn {
-                background: #FEE500;
-                color: #000;
-                padding: 14px 22px;
-                border-radius: 25px;
-                font-size: 16px;
-                font-weight: bold;
-                text-decoration: none;
-                display: inline-block;
-                margin-bottom: 25px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            }
-            .back-link {
-                display: block;
-                margin-bottom: 30px;
-                color: #555;
-                text-decoration: none;
-            }
-            .content-box {
-                background: #f9f9f9;
-                padding: 20px;
-                border-radius: 10px;
-                white-space: pre-wrap;
-                font-size: 16px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            }
-        </style>
-<meta content="이재명 대통령후보 정책모음 - [ 교육 ]" property="og:title"/><meta content="정책 분야: 교육 " property="og:description"/><meta content="https://bluenew.life/policy/edu/1.jpg" property="og:image"/><meta content="https://bluenew.life/policy/edu/index.html" property="og:url"/>
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-<script>
-    Kakao.init('37ea916b7f1ab457b58119c60ec4052a');
-    function shareKakao() {
-        Kakao.Link.sendDefault({
-            objectType: 'feed',
-            content: {
-                title: document.title,
-                description: document.querySelector("meta[property='og:description']")?.content || '',
-                imageUrl: document.querySelector("meta[property='og:image']")?.content || '',
-                link: {
-                    mobileWebUrl: location.href,
-                    webUrl: location.href
-                }
-            },
-            buttons: [
-                {
-                    title: '자세히 보기',
-                    link: {
-                        mobileWebUrl: location.href,
-                        webUrl: location.href
-                    }
-                }
-            ]
-        });
+
+<html lang='ko'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이재명 대통령후보 정책모음</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; }
+    h1 {
+      font-size: clamp(1.2rem, 4vw, 2rem); /* 최소 1.5rem, 최대 2rem, 중간 뷰포트에선 8vw */
+      text-align: center;
+      margin-bottom: 30px;
+      white-space: nowrap;               /* 줄 바꿈 금지 */
+      overflow: hidden;                  /* 넘치는 텍스트 숨기기 */
+      text-overflow: ellipsis;           /* 너무 길면 ... 처리 (선택) */
     }
-</script>
-</head><body><a class="back-link" href="../index.html">← 메인으로 돌아가기</a><h1>이재명 대통령후보 정책모음<br/>[ 교육 ]</h1><a class="share-btn" href="#" onclick="shareKakao()">카카오톡으로 공유하기</a><img class="thumb" src="https://bluenew.life/policy/edu/1.jpg"/><img class="thumb" src="https://bluenew.life/policy/edu/2.jpg"/><img class="thumb" src="https://bluenew.life/policy/edu/3.jpg"/><img class="thumb" src="https://bluenew.life/policy/edu/4.jpg"/><img class="thumb" src="https://bluenew.life/policy/edu/5.jpg"/><div class="content-box"><!-- 내용시작 -->
-교육의 국가 책임을 강화해 
 
-모두가 안전하고 행복한 학교를 만들겠습니다
+    
+    /* 메인페이지로 돌아가기 버튼 */
+    .home-btn {
+      position: absolute;
+      top: 16px;    /* 살짝 더 위로 올려도 되고 */
+      left: 16px;
+      background: none;
+      color: #888;          /* 연한 회색 */
+      font-size: 12px;      /* 좀 더 작은 크기 */
+      padding: 4px 6px;     /* 여백도 작게 */
+      text-decoration: none;
+    }
 
-​
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      position: relative;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 25px 15px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: background 0.2s;
+        white-space: nowrap;           /* 줄 바꿈 방지 */
+  overflow: hidden;              /* 넘치는 글자 숨기기 */
+  text-overflow: ellipsis;       /* ...으로 생략 */
+  font-size: clamp(12px, 2vw, 16px); /* 반응형 폰트 크기 */
 
-옛말에 ‘일 년 계획으로 곡식을 거두고, 십 년을 계획해 나무를 키우고, 평생을 계획해 사람을 기른다’고 했습니다. 훌륭한 인재를 기르기는 무척 어렵고 오래 걸리는 일이기에, 교육을 백년대계(百年大計)라 하며 국가의 근본사업이라 한 것입니다.
-
-​
-
-자원도 자본도 없던 대한민국이 기술 선진국으로 도약할 수 있었던 힘은 바로 교육에 있었습니다. 다시 한 번 그 힘을 발휘해 내일의 기회로 이어가겠습니다. 신뢰받는 공교육, 미래를 여는 교육 혁신으로 K-교육을 완성하겠습니다.
-
-​
-
-첫째, 유아·초등교육의 국가 책임을 강화하겠습니다. 
-
-유아교육‧보육비 지원을 5세부터 단계적으로 확대하겠습니다. 교사 대 아동 비율을 OECD 수준까지 단계적으로 낮추고, 더 세심하고 안전한 교육환경을 만들겠습니다. 국가와 지자체, 학교가 함께하는 ‘온동네 초등돌봄’으로 질 높은 돌봄교육을 제공하겠습니다.
-
-​
-
-둘째, 학생들의 기초학력을 높이고 학습역량을 강화하겠습니다. 
-
-학습 결과가 잠재력에 미치지 못하는 ‘학습결손’을 조기에 발견해, 지원이 필요한 학생에게 전문 교사의 개별지도를 확대하겠습니다. 지역 곳곳에 ‘자기주도학습센터’를 설치해 사교육비 부담도 줄이겠습니다.
-
-​
-
-셋째, 학생의 정서와 신체, 디지털 건강을 돌보겠습니다. 
-
-정서와 행동 문제로 어려움을 겪는 학생(정서‧행동 위기학생)에게 검사부터 상담, 치료까지 이어지는 맞춤형 지원을 제공하겠습니다. 디지털에 지나치게 의존하는 청소년을 위한 지원 프로그램도 운영하겠습니다. 체육교육을 활성화하고, 체험학습 안전관리도 전문화하겠습니다.
-
-​
-
-넷째, 초·중·고 학교에서 시민교육을 강화하겠습니다.
-
-청소년이 자기 삶을 주도할 수 있도록 민주주의, 인권, 환경, 역사 교육을 활성화하겠습니다. 스스로 생각하고 실천하는 힘, 공동체를 이해하는 힘을 기르겠습니다.
-
-​
-
-다섯째, 고등교육을 혁신해 미래인재를 키우겠습니다.
-
-‘서울대 10개 만들기’를 추진하겠습니다. 지역거점국립대를 전략적으로 집중 육성해 대학서열을 완화하고, 국가균형발전을 이루겠습니다. 이들 국립대를 세계적인 연구대학으로 키우고, 지역 사립대학과 협력해 대학이 지역 혁신과 성장의 중심이 되도록 하겠습니다.
-
-​
-
-여섯째, 직업교육을 강화하고, 평생교육을 확대하겠습니다.
-
-직업계고와 전문대, 대학 간 연계를 강화해 직업교육의 질을 높이겠습니다. ‘고졸 후학습자 국가장학금’지원을 확대하고, 성인과 중장년의 인생 이모작 도전을 지원하는 전환교육을 강화하겠습니다. 평생교육 지원을 확대해 누구나 언제든지 배울 수 있는 평생학습 체제를 고도화하겠습니다.
-
-​
-
-일곱째, 교육정책은 국민과 함께 정하겠습니다.
-
-국가교육위원회를 중심으로 숙의와 사회적 합의를 존중하겠습니다. 과도한 유아 사교육 문제에 대해서도 실효성 있는 해법이 마련되도록 돕겠습니다.
-
-​
-
-여덟째, 교권 보호 제도를 학교 현장에 뿌리내리겠습니다. 
-
-선생님이 행복해야 아이들도 행복합니다. 
-
-선생님이 걱정 없이 교육에 전념할 수 있는 환경을 만들겠습니다. 불필요한 행정업무는 줄이고, 민원 처리 시스템은 더욱 체계화하겠습니다. ‘마음돌봄 휴가’를 도입해 선생님의 마음 건강과 회복을 지원하겠습니다. 
-
-​
-
-근무시간 외에는 직무와 무관한 정치활동의 자유를 보장해, 헌법이 보장한 권리를 회복하겠습니다. 선생님도 민주사회 구성원으로서 정당하게 존중받을 수 있게 하겠습니다. 
-
-​
-
-국가가 보장하고 선생님이 교육에 전념해, 아이들이 믿고 자랄 수 있는 책임 교육을 기본으로 하겠습니다. 민주시민 모두가 성장의 기쁨을 함께 누리고, 누구나 실력을 꽃피울 수 있는 K-교육 강국을 만들겠습니다.
-
-​
-
-이제부터 진짜 대한민국, 
-
-지금은 이재명입니다.
+    }
 
 
-<!-- 내용시작 -->
+    .new-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+    .card:hover {
+      background: #f3f3f3;
+    }
+    a {
+      color: black;
+      text-decoration: none;
+    }
+    footer {
+      margin-top: 40px;
+    }
+    footer img {
+      display: block;
+      margin: 0 auto;
+    }
 
 
-</div><footer style="
+
+  
+<style>
+.copy-container {
+  display: flex;
+  align-items: center;
+  background: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.copy-url {
+  flex: 1 1 10px;
+  min-width: 0; /* 핵심! 줄바꿈 방지 + ... 표시 */
+    max-width: 100px; /* 최대 길이 제한 (원하는 만큼 줄여도 됨) */
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: #ddd;
+  border: none;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 4px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #ccc;
+}
+
+
+
+</style>
+
+</style>
+
+</head>
+<body>
+
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+  <a href="http://bluenew.life" style="color: #888; font-size: 12px; text-decoration: none;">메인페이지로 돌아가기</a>
+  <div class="copy-container">
+    <span class="copy-url" id="current-url" onclick="copyToClipboard()">로딩중...</span>
+    <button class="copy-btn" onclick="copyToClipboard()">복사</button>
+  </div>
+</div>
+
+   
+
+  <h1>📚 이재명 대통령후보 정책모음</h1>
+
+<!-- 최근 업데이트된 정책 강조 카드 -->
+<div style="margin: 30px auto; max-width: 360px;">
+  <a href="edu/index.html" style="text-decoration: none;">
+    <div style="
+      position: relative;
+      border: 2px solid #007bff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.2s;
+    " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+      
+      <!-- 상단 NEW 배지 -->
+      <div style="
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: red;
+        color: white;
+        font-size: 10px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-weight: bold;
+      ">신규 업데이트</div>
+      
+      <!-- 메인 타이틀 -->
+      <div style="
+        font-size: 22px;
+        font-weight: 800;
+        color: #007bff;
+        margin-bottom: 6px;
+      ">
+        📌 교육정책
+      </div>
+
+      <!-- 부가 설명 -->
+      <div style="
+        font-size: 13px;
+        color: #555;
+        margin-top: 4px;
+      ">
+        안전하고 행복한 학교!
+      </div>
+    </div>
+  </a>
+</div>
+<!-- 최근 업데이트된 정책 강조 카드 -->
+
+  <div class='grid'>
+    <a href='dg/index.html'><div class='card'>대구·경북 지역정책</div></a>
+    <a href='youth/index.html'><div class='card'>청년</div></a>
+    <a href='sosang/index.html'><div class='card'>경제:소상공인 자영업자</div></a>
+    <a href='ban/index.html'><div class='card'>경제:반도체</div></a>
+    <a href='energy/index.html'><div class='card'>경제:에너지</div></a>
+    <a href='stock/index.html'><div class='card'>경제:주식</div></a>
+    <a href='science/index.html'><div class='card'>경제:과학</div></a>
+    <a href='nongup/index.html'><div class='card'>경제:농업</div></a>
+    <a href='fish/index.html'><div class='card'>경제:어업</div></a>
+    <a href='shipbuilding/index.html'><div class='card'>경제:조선산업</div></a>
+    <a href='labour/index.html'><div class='card'>노동</div></a>
+    <a href='no/index.html'><div class='card'>노동:직장인</div></a>
+    <a href='bok/index.html'><div class='card'>복지:공공의료</div></a>
+    <a href='kidz/index.html'><div class='card'>복지:어린이</div></a>
+    <a href='disabled/index.html'><div class='card'>복지:장애인</div></a>
+    <a href='dis/index.html'><div class='card'>재난 재해</div></a>
+    <a href='ahn/index.html'><div class='card'>안전</div></a>
+    <a href='env/index.html'><div class='card'>환경</div></a>
+    <a href='aged/index.html'><div class='card'>어르신</div></a>
+    <a href='gihunong/index.html'><div class='card'>농림축산식품</div></a>
+    <a href='navy/index.html'><div class='card'>해병대</div></a>
+    <a href='space/index.html'><div class='card'>항공방위우주</div></a>
+    <a href='gook/index.html'><div class='card'>국방</div></a>
+    <a href='bud/index.html'><div class='card'>문화:불교</div></a>
+      </div>
+<!-- <div class="new-badge">NEW!</div> 뉴 딱지-->
+
+
+</body>
+
+<footer style="
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px 0;
 ">
-<a href="https://theminjoodaegu.co.kr/"><img alt="더불어민주당 대구광역시당 로고" src="150_png_dgsd_logo.png" width="150"/></a>
-</footer></body></html>
+  <a href='https://theminjoodaegu.co.kr/'><img src="150_png_dgsd_logo.png" width="150" alt="더불어민주당 대구광역시당 로고"></a>
+</footer>
+
+</html>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const fullUrl = window.location.href;
+    const displayUrl = fullUrl.length > 40 ? fullUrl.slice(0, 37) + "..." : fullUrl;
+    document.getElementById('current-url').textContent = displayUrl;
+
+    window.copyToClipboard = function () {
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        alert('주소가 복사되었습니다!');
+      }).catch(err => {
+        alert('복사 실패: ' + err);
+      });
+    };
+  });
+</script>
+
+</body></html>
